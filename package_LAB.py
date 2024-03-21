@@ -135,12 +135,39 @@ def PID_RT(SP, PV, Man, MVMan, MVFF, KC, Ti, Td, alpha, Ts, MVMin, MVMax, MV, MV
     MV.append(MVP[-1] + MVI[-1] + MVD[-1] + MVFF[-1])
 
 
-
-
-
-
-
 #----------------------------------------------------------------------------------------------   
+def IMCTuning(Kp, Tlag1, Tlag2, theta, gamma, model="SOPDT"):
+    """
+    Computes the optimised PID controller settings for FOPDT/SOPDT processes.
+    :Kp: process gain
+    :Tlag1: processfirst lag time constant.
+    :Tlag2: (SOPDT only) process second lag time constant.
+    :theta: process delay.
+    :gamma: loop response time as a ratio of T1
+    :model:
+        FOPDT_PI: First Order Plus Dead Time for P-I control (IMC tuning case G)
+        FOPDT_PID: First Order Plus Dead Time for P-I-D control (IMC tuning case H)
+        SOPDT :Second Order Plus Dead Time for P-I-D control (IMC tuning case I)
+        
+    return : PID controller parameters Kc, Ti and Td
+    """
+    T_CLP = gamma * Tlag1
+    
+    if process=="FOPDT_PI":
+        Kc = (Tlag1/(T_CLP+theta))/Kp
+        Ti = Tlag1
+        Td = 0
+    elif process=="FOPDT_PID":
+        Kc= ((Tlag1 + theta/2)/(T_CLP + theta/2))/Kp
+        Ti = Tlag1 + theta/2
+        Td = (Tlag1*theta)/(2*Tlag1+theta)
+    elif process=="SOPDT": 
+        Kc = ((Tlag1 + Tlag2)/(T_CLP + theta))/Kp
+        Ti = (Tlag1 +Tlag2)
+        Td = ((Tlag1*Tlag2))/(Tlag1+Tlag2)
+    
+    return (Kc, Ti, Td)
+
 
 
 
