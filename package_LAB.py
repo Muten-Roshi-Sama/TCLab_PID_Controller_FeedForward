@@ -135,6 +135,7 @@ def PID_RT(SP, PV, Man, MVMan, MVFF, KC, Ti, Td, alpha, Ts, MVMin, MVMax, MV, MV
     MV.append(MVP[-1] + MVI[-1] + MVD[-1] + MVFF[-1])
 
 
+
 #----------------------------------------------------------------------------------------------   
 def IMCTuning(Kp, Tlag1, Tlag2, theta, gamma, model="SOPDT"):
     """
@@ -153,15 +154,15 @@ def IMCTuning(Kp, Tlag1, Tlag2, theta, gamma, model="SOPDT"):
     """
     T_CLP = gamma * Tlag1
     
-    if process=="FOPDT_PI":
+    if model=="FOPDT_PI":
         Kc = (Tlag1/(T_CLP+theta))/Kp
         Ti = Tlag1
         Td = 0
-    elif process=="FOPDT_PID":
+    elif model=="FOPDT_PID":
         Kc= ((Tlag1 + theta/2)/(T_CLP + theta/2))/Kp
         Ti = Tlag1 + theta/2
         Td = (Tlag1*theta)/(2*Tlag1+theta)
-    elif process=="SOPDT": 
+    elif model=="SOPDT": 
         Kc = ((Tlag1 + Tlag2)/(T_CLP + theta))/Kp
         Ti = (Tlag1 +Tlag2)
         Td = ((Tlag1*Tlag2))/(Tlag1+Tlag2)
