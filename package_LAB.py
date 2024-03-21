@@ -84,7 +84,6 @@ def PID_RT(SP, PV, Man, MVMan, MVFF, KC, Ti, Td, alpha, Ts, MVMin, MVMax, MV, MV
     else:
         E.append(SP[-1] - PV[-1])
 
-    #-----------------Proportional Action---------
     if len(MVP)==0 :
         MVP.append((KC*E[-1]))
     else:
