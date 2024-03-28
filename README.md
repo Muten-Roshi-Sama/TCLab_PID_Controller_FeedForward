@@ -21,6 +21,8 @@ For any permission related errors try :
 ```python
 >> pip install pandas numpy matplotlib --user
 ```
+Be sure to use the same python version for your kernel and on your terminal when installing with pip (ModuleNotFoundError)
+Disabling pylance solves the *'import "pandas" could not be resolved from sourcePylancereportMissingModuleSource'* problem.
 
 ## Submission
 - **Submission Deadline:** 04 april 2024, 4pm
