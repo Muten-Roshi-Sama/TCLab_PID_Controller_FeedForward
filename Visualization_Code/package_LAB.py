@@ -46,7 +46,7 @@ def LL_RT(MV, Kp, TLead, TLag, Ts, PV, PVInit=0, method='EBD'):
 
 #-----------------------------------
 
-def PID_RT(SP, PV, Man, MVMan, MVFF, KC, Ti, Td, alpha, Ts, MVMin, MVMax, MV, MVP, MVI, MVD, E, ManFF=False, PVInit=0, method='EBD-EBD'):
+def PID_RT(SP, PV, Man, MVMan, MVFF, KC, Ti, Td, alpha, Ts, MVMin, MVMax, MV, MVP, MVI, MVD, E, ManFF=False, PVInit=0, method='EBD'):
     """
     The function "PID_RT" needs to be included in a "for or while loop".
     SP: (or SetPoint) vector
@@ -80,17 +80,19 @@ def PID_RT(SP, PV, Man, MVMan, MVFF, KC, Ti, Td, alpha, Ts, MVMin, MVMax, MV, MV
     TFD = Td * alpha
     #-----------------ERROR----------------
     if len(PV) ==0 :
+        print("E = ", E, "  \len(E) = ", len(E), "Rest = ", SP[-1] - PVInit)
         E.append(SP[-1] - PVInit)
     else:
         E.append(SP[-1] - PV[-1])
 
+    #----------------Proportionnal_ Action-----------
     if len(MVP)==0 :
         MVP.append((KC*E[-1]))
     else:
-        if method == 'EBD-EBD':
+        if method == 'EBD':
             MVP.append(KC*E[-1])
-        # elif method == 'TRAP-TRAP':  
-        #     MVP.append(KC*E[-1])        
+        elif method == 'TRAP':  
+            MVP.append(KC*E[-1])        
         else: 
             MVP.append(KC*E[-1])
     
@@ -98,7 +100,7 @@ def PID_RT(SP, PV, Man, MVMan, MVFF, KC, Ti, Td, alpha, Ts, MVMin, MVMax, MV, MV
     if len(MVI) == 0 :      
         MVI.append((KC*Ts/Ti)*E[-1])    # MV[k] is MV[-1] and MV[k-1] is MV[-2]
     else:
-        if method == 'EBD-EBD':
+        if method == 'EBD':
             MVI.append(MVI[-1] + ((KC*Ts)/Ti)*(E[-1]))
         elif method == 'TRAP':
             MVI.append(MVI[-1] + (0.5*KC*Ts/Ti)*(E[-1] + E[-2]))
@@ -109,9 +111,9 @@ def PID_RT(SP, PV, Man, MVMan, MVFF, KC, Ti, Td, alpha, Ts, MVMin, MVMax, MV, MV
     if len(MVD)==0:
         MVD.append(((KC*Td)/(TFD+Ts))*(E[-1]))
     else:
-        if method == 'EBD-EBD':
+        if method == 'EBD':
             MVD.append((TFD/(TFD+Ts))*MVD[-1] + ((KC*Td)/(TFD+Ts))*(E[-1] - E[-2])) 
-        elif method =='TRAP-TRAP':
+        elif method =='TRAP':
             MVD.append((((TFD-(Ts/2))/(TFD+(Ts/2)))*MVD[-1] + ((KC*Td)/(TFD+(Ts/2)))*(E[-1] - E[-2])))     
         else:  # EBD
             MVD.append((TFD/(TFD+Ts))*MVD[-1] + ((KC*Td)/(TFD+Ts))*(E[-1] - E[-2]))
