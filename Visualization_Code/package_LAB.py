@@ -34,8 +34,8 @@ def LL_RT(MV, Kp, TLead, TLag, Ts, PV, PVInit=0, method='EBD'):
                 PV.append(((1/(1+K))*PV[-1]) + ((K*Kp/(1+K))*(((1+(TLead/Ts))*MV[-1])-((TLead/Ts)*MV[-2]))))
             elif method == 'EFD':
                 PV.append((1-K)*PV[-1] + Kp*K*((TLead/Ts) *MV[-1] + (1-TLead/Ts)*MV[-2]) )
-            # elif method == 'TRAP':
-            #     PV.append(PV[-1]*((2-K)/(2+K)) + ((Kp*K)/(2+K)) * ((2*(TLead/Ts)+1)*MV[-1] - 2*(TLead/Ts)*MV[-2] + MV[-2] ))            
+            elif method == 'TRAP':
+                PV.append(PV[-1]*((2-K)/(2+K)) + ((Kp*K)/(2+K)) * ((2*(TLead/Ts)+1)*MV[-1] - 2*(TLead/Ts)*MV[-2] + MV[-2] ))            
             else:      #default:EBD
                 PV.append(((1/(1+K))*PV[-1]) + ((K*Kp/(1+K))*(((1+(TLead/Ts))*MV[-1])-((TLead/Ts)*MV[-2]))))
             
@@ -175,7 +175,12 @@ def IMCTuning(Kp, Tlag1, Tlag2, theta, gamma, model="SOPDT"):
 
 
 #-----------------------------------
-
+def Margin():
+    """ 
+    
+    
+    
+    """
 
 #-----------------------------------        
 # class Controller:  // pour plus tard
